@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Purchase Form</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="Ticket.css">
+    </head>
+
+    <body>
+        <div class="Formarea w3-animate-bottom">
+            <div class="w3-container w3-animate-top">
+            <h1 class="w3-animate-left">Purchase Ticket</h1>
+            
+            <form class="w3-animate-right">
+            <!--Name-->
+            <label for="full-name">Full Name</label>
+            <input type="text" required>
+
+            <!--Email-->
+            <label for="full-name">Email</label>
+            <input type="email" required>
+
+            <!--Age-->
+            <p>Select Your Age</p>
+
+            <label>9-12</label>
+            <input type="radio" id="9-12" name="age" value="9-12" required>
+            <label>13-16</label>
+            <input type="radio" id="13-16" name="age" value="13-16" required>
+            <label>17-19</label>
+            <input type="radio" id="17-19" name="age" value="17-19" required>
+
+            <!--Age Confermation/Birthday-->
+            <label>Date of Birth</label>
+            <input type="date">
+
+            <!--Ticket Amount-->
+            <label>Number Of Tickets</label>
+            <input type="number" id="ticket-amount" name="ticket_amount" required>
+
+            <!--Ticket Type-->
+            <label for="ticket-type">Select Ticket Type</label>
+            <select id="ticket-type" name="ticket_type" required>
+                <option value="">None</option>
+                <option value="standard">Standard - $30</option>
+            </select>
+            
+            <!--Phone Number-->
+            <label>Phone Number</label>
+            <input type="text">
+
+            <!--Total Price-->
+            <p>Total price</p>
+            <input type="text" id="total-price" name="total_price" readonly>
+            </form>
+
+            <!--Submit-->
+            <a href="Number.html"><button type="submit">Submit</button></a>
+            </div>
+        </div>
+
+        <script>
+
+        document.getElementById('ticket-type').addEventListener('change', calculateTotal);
+        document.getElementById('ticket-amount').addEventListener('input', calculateTotal);
+
+        function calculateTotal() {
+            const ticketType = document.getElementById('ticket-type').value;
+            const ticketQuantity = document.getElementById('ticket-amount').value;
+            let pricePerTicket = 0;
+
+            if (ticketType === 'standard') {
+                pricePerTicket = 30;
+            } 
+
+            const totalPrice = pricePerTicket * ticketQuantity;
+            document.getElementById('total-price').value = '$' + totalPrice.toFixed(2);
+        }
+
+        // Call calculateTotal on load to set the initial total price
+        calculateTotal();
+        </script>
+
+<script>
+    function submitForm() {
+        // Gather form data
+        const name = document.getElementById('full-name').value;
+        const email = document.getElementById('email').value;
+        const age = document.querySelector('input[name="age"]:checked').value;
+        const ticketAmount = document.getElementById('ticket-amount').value;
+        const ticketType = document.getElementById('ticket-type').value;
+        const phoneNumber = document.getElementById('phone-number').value;
+        const totalPrice = document.getElementById('total-price').value;
+
+        // Send form data to the server
+        fetch('/submit-form', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                age,
+                ticketAmount,
+                ticketType,
+                phoneNumber,
+                totalPrice
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message); // Show the server's response
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form.');
+        });
+    }
+</script>
+
+        <footer>
+            <a href="Plsread.html">Please read before starting!!!</a>
+        </footer>
+    </body>
+</html>
